@@ -226,63 +226,7 @@ console.error(err);
 btn.disabled=false; btn.textContent="دابەزاندنی وێنە PNG";
 }
 };
-  $("download").onclick=async()=>{
-const btn=$("download");
-btn.disabled=true;
-btn.textContent="خەریکی دروستکردنە...";
-try{
-const original=$("card");
-const holder=document.createElement("div");
-holder.style.cssText="position:fixed;left:-20000px;top:0;width:1536px;height:1024px;overflow:hidden;";
-const clone=original.cloneNode(true);
-clone.style.cssText+=";position:relative!important;left:0!important;top:0!important;transform:none!important;width:1536px!important;height:1024px!important;margin:0!important;";
-holder.appendChild(clone);
-document.body.appendChild(holder);
-const qr=clone.querySelector("#qr");
-const src=original.querySelector("#qr canvas,#qr img");
-if(qr&&src){
-const img=document.createElement("img");
-img.src=src.tagName==="CANVAS"?src.toDataURL("image/png"):src.src;
-img.style.cssText="display:block!important;width:189px!important;height:189px!important;max-width:189px!important;max-height:189px!important;margin:0 auto!important;";
-qr.innerHTML="";
-qr.appendChild(img);
-}
-await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
-
-const canvas=await html2canvas(clone,{
-scale:2,
-useCORS:true,
-allowTaint:true,
-backgroundColor:null,
-width:1536,
-height:1024,
-scrollX:0,
-scrollY:0
-});
-
-holder.remove();
-
-const blob=await new Promise(r=>canvas.toBlob(r,"image/png"));
-if(!blob)throw new Error("PNG failed");
-
-const file=new File([blob],"Noor-Ziyarat-Umrah-Pass.png",{type:"image/png"});
-
-if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){
-try{
-await navigator.share({files:[file],title:"باجی عومرەکاران"});
-return;
-}catch(e){}
-}
-
-const url=URL.createObjectURL(blob);
-const a=document.createElement("a");
-a.href=url;
-a.download="Noor-Ziyarat-Umrah-Pass.png";
-document.body.appendChild(a);
-a.click();
-a.remove();
-setTimeout(()=>URL.revokeObjectURL(url),3000);
-
+ 
 }catch(err){
 alert("لە دروستکردنی وێنەکە کێشەیەک ڕوویدا.");
 console.error(err);
