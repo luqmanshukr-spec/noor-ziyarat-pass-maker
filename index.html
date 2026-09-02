@@ -238,7 +238,15 @@ const clone=original.cloneNode(true);
 clone.style.cssText+=";position:relative!important;left:0!important;top:0!important;transform:none!important;width:1536px!important;height:1024px!important;margin:0!important;";
 holder.appendChild(clone);
 document.body.appendChild(holder);
-const qr=clone.querySelector("#qr"); if(qr){qr.style.width="100px";qr.style.height="100px";const c=qr.querySelector("canvas");if(c){c.style.width="100px";c.style.height="100px";}}
+const qr=clone.querySelector("#qr");
+const src=original.querySelector("#qr canvas,#qr img");
+if(qr&&src){
+const img=document.createElement("img");
+img.src=src.tagName==="CANVAS"?src.toDataURL("image/png"):src.src;
+img.style.cssText="display:block!important;width:189px!important;height:189px!important;max-width:189px!important;max-height:189px!important;margin:0 auto!important;";
+qr.innerHTML="";
+qr.appendChild(img);
+}
 await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
 
 const canvas=await html2canvas(clone,{
